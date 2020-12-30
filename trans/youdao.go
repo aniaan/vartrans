@@ -20,8 +20,8 @@ type YouDaoResult struct {
 }
 
 type YouDaoFetcher struct {
-	appKey    string
-	appSecret string
+	AppKey    string
+	AppSecret string
 }
 
 func (y *YouDaoFetcher) fetch(q string) ([]string, error) {
@@ -31,7 +31,7 @@ func (y *YouDaoFetcher) fetch(q string) ([]string, error) {
 	signType := "v3"
 	curtime := strconv.FormatInt(time.Now().Unix(), 10)
 	salt := uuid.New().String()
-	signStr := y.appKey + y.truncate(q) + salt + curtime + y.appSecret
+	signStr := y.AppKey + y.truncate(q) + salt + curtime + y.AppSecret
 	sign := y.encrypt(signStr)
 	values := url.Values{
 		"from":     {from},
@@ -40,7 +40,7 @@ func (y *YouDaoFetcher) fetch(q string) ([]string, error) {
 		"salt":     {salt},
 		"sign":     {sign},
 		"q":        {q},
-		"appKey":   {y.appKey},
+		"appKey":   {y.AppKey},
 		"curtime":  {curtime},
 	}
 	resp, err := http.PostForm(api, values)
@@ -86,12 +86,4 @@ func (y *YouDaoFetcher) encrypt(signStr string) string {
 	value := sha256.Sum256([]byte(signStr))
 	return hex.EncodeToString(value[:])
 
-}
-
-func NewYouDaoFetcher(appKey string, appSecret string) Fetcher {
-	fetcher := YouDaoFetcher{
-		appKey:    appKey,
-		appSecret: appSecret,
-	}
-	return &fetcher
 }

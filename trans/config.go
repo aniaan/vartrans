@@ -8,8 +8,10 @@ const (
 	ZH = "zh"
 )
 
+const (
+	YOUDAO = "youdao"
+)
 
-
-
-
-
+var FETCHERS = map[string]int{
+	"youdao": 1,
+}

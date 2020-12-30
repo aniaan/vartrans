@@ -14,7 +14,7 @@ type Result struct {
 type Translate struct {
 	Query   string
 	Method  string
-	fetcher Fetcher
+	Fetcher Fetcher
 }
 
 func (t *Translate) Execute() ([]Result, error) {
@@ -22,7 +22,7 @@ func (t *Translate) Execute() ([]Result, error) {
 	case CL:
 		return t.run(constant)
 	case XT:
-		return t.run(snakeCase)
+		return t.run(camelCase)
 	case DT:
 		return t.run(bigCamelCase)
 	case XH:
@@ -30,13 +30,13 @@ func (t *Translate) Execute() ([]Result, error) {
 	case ZH:
 		return t.run(hyphen)
 	default:
-		return []Result{}, errors.New("method")
+		return nil, errors.New("invalid method")
 	}
 
 }
 
 func (t *Translate) run(f func(value string) string) ([]Result, error) {
-	fetchResult, err := t.fetcher.fetch(t.Query)
+	fetchResult, err := t.Fetcher.fetch(t.Query)
 
 	if err != nil {
 		return nil, err
