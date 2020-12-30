@@ -32,7 +32,8 @@ func run() {
 		for _, result := range results {
 			wf.NewItem(result.Title).
 				Subtitle(result.SubTitle).
-				Arg(result.Arg)
+				Arg(result.Arg).
+				Valid(true)
 		}
 	}
 	wf.SendFeedback()
